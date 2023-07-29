@@ -36,7 +36,6 @@ export class AuthController {
     }
   }
 
-
   @Post('homepage')
   @Roles('admin')
   @UseGuards(AuthGuard, RolesGuard)

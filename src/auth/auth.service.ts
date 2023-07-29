@@ -28,7 +28,7 @@ export class AuthService {
   async signUp(body: SignupDto): Promise<SignUpInterface> {
     const { username, password, role } = body;
     const existingUser = await this.usersService.findOneByUsername(username);
-    
+
     if (existingUser) {
       throw new UnauthorizedException('Username already exists');
     }
