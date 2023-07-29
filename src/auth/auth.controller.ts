@@ -43,8 +43,6 @@ export class AuthController {
   async homepage(@Req() request: CustomRequest) {
     try {
       const currentUser = request?.user;
-      console.log(currentUser);
-      
       return await this.authService.homepage(currentUser);
     } catch (error) {
       throw new HttpException(error.message, HttpStatus.UNAUTHORIZED);
