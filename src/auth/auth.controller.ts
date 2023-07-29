@@ -1,4 +1,4 @@
-import { Injectable, Post, Body, HttpStatus, HttpException, Controller, UseGuards } from '@nestjs/common';
+import { Injectable, Post, Body, HttpStatus, HttpException, Controller, UseGuards, Get, Req } from '@nestjs/common';
 import { SignupDto } from '../users/dto/signup.dto';
 import { AuthService } from './auth.service';
 import { LoginDto } from '../users/dto/login.dto';
@@ -6,6 +6,11 @@ import { ApiTags } from '@nestjs/swagger';
 import { RolesGuard } from './roles.guard';
 import { Roles } from './roles.decorator';
 import { AuthGuard } from './auth.guard';
+import { Request as ExpressRequest } from 'express';
+
+interface CustomRequest extends ExpressRequest {
+  user: any; // Adjust 'any' to the actual type of the user object if known
+}
 
 @Injectable()
 @ApiTags('Authentication')
@@ -35,9 +40,12 @@ export class AuthController {
   @Post('homepage')
   @Roles('admin')
   @UseGuards(AuthGuard, RolesGuard)
-  async homepage() {
+  async homepage(@Req() request: CustomRequest) {
     try {
-      return await this.authService.homepage();
+      const currentUser = request?.user;
+      console.log(currentUser);
+      
+      return await this.authService.homepage(currentUser);
     } catch (error) {
       throw new HttpException(error.message, HttpStatus.UNAUTHORIZED);
     }

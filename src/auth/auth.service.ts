@@ -1,17 +1,19 @@
-import { Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable, NotFoundException, Req, UnauthorizedException } from '@nestjs/common';
 import { UsersService } from '../users/users.service';
 import { JwtService } from '@nestjs/jwt';
 import { SignupDto } from '../users/dto/signup.dto';
 import { User } from '../users/users.schema';
 import { LoginDto } from '../users/dto/login.dto';
 import { LoginInterface, SignUpInterface } from '../interfaces/index';
-import { JwtPayload } from 'src/types';
+import { JwtPayload } from '../types';
+import { EmailService } from '../services/email.service';
 
 @Injectable()
 export class AuthService {
   constructor(
     private readonly usersService: UsersService,
-    private readonly jwtService: JwtService
+    private readonly jwtService: JwtService,
+    private readonly emailService: EmailService,
   ) { }
 
   async validateUser(payload: JwtPayload) {
@@ -26,7 +28,7 @@ export class AuthService {
   async signUp(body: SignupDto): Promise<SignUpInterface> {
     const { username, password, role } = body;
     const existingUser = await this.usersService.findOneByUsername(username);
-
+    
     if (existingUser) {
       throw new UnauthorizedException('Username already exists');
     }
@@ -60,7 +62,7 @@ export class AuthService {
     };
   }
 
-  async homepage() {
+  async homepage(user: object) {
     return {
       message: "Congrats! You have hacked my prkskrs private page!"
     }

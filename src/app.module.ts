@@ -12,8 +12,6 @@ import { UsersModule } from './users/users.module';
 
 @Module({
   imports: [
-    // DbModule,
-    // SupabaseModule,
     DatabaseModule,
     AuthModule,
     UsersModule,

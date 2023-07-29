@@ -5,6 +5,7 @@ import { JwtStrategy } from './jwt.strategy';
 import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
 import { UsersModule } from '../users/users.module';
+import { EmailService } from '../services/email.service';
 
 
 @Module({
@@ -14,10 +15,9 @@ import { UsersModule } from '../users/users.module';
       secret: process.env.JWT_SECRET,
       signOptions: { expiresIn: '1h' }
     }),
-    UsersModule,
-  ],
+    UsersModule],
   controllers: [AuthController],
-  providers: [AuthService, JwtStrategy],
+  providers: [AuthService, JwtStrategy, EmailService],
   exports: [JwtModule, PassportModule]
 })
 export class AuthModule { }
