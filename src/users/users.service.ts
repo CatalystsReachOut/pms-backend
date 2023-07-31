@@ -15,14 +15,14 @@ export class UsersService {
     return this.userModel.findById(id).exec();
   }
 
-  async findOneByUsername(username: string): Promise<User | null> {
-    return this.userModel.findOne({ username }).exec();
+  async findOneByUsername(userName: string): Promise<User | null> {
+    return this.userModel.findOne({ userName }).exec();
   }
 
   async create(createUserDto: SignupDto): Promise<User> {
-    const { username, password, role } = createUserDto;
+    const { email, userName, password, role } = createUserDto;
     const hashedPassword = await bcrypt.hash(password, 10);
-    const newUser = new this.userModel({ username, password: hashedPassword, role });
+    const newUser = new this.userModel({ email, userName, password: hashedPassword, role });
     return newUser.save();
   }
 
