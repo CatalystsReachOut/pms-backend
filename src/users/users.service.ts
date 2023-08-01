@@ -15,18 +15,22 @@ export class UsersService {
     return this.userModel.findById(id).exec();
   }
 
-  async findOneByUsername(username: string): Promise<User | null> {
-    return this.userModel.findOne({ username }).exec();
+  async findOneByUsername(userName: string): Promise<User | null> {
+    return this.userModel.findOne({ userName }).exec();
   }
 
   async create(createUserDto: SignupDto): Promise<User> {
-    const { username, password, role } = createUserDto;
-    const hashedPassword = await bcrypt.hash(password, 10);
-    const newUser = new this.userModel({ username, password: hashedPassword, role });
+    const { email, userName, password, role } = createUserDto;
+    const hashedPassword = await this.hashPassword(password);
+    const newUser = new this.userModel({ email, userName, password: hashedPassword, role });
     return newUser.save();
   }
 
   async comparePasswords(plainPassword: string, hashedPassword: string): Promise<boolean> {
     return bcrypt.compare(plainPassword, hashedPassword);
+  }
+
+  async hashPassword(password: string):Promise<string>{
+    return await bcrypt.hash(password,10)
   }
 }

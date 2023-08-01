@@ -9,12 +9,14 @@ import { ValidationExceptionFilter } from './filters/validator-exception.filter'
 import { ResponseInterceptor } from './interceptor/response.interceptor';
 import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
+import { OtpModule } from './otp/otp.module';
 
 @Module({
   imports: [
     DatabaseModule,
     AuthModule,
     UsersModule,
+    OtpModule,
   ],
   controllers: [AppController],
   providers: [

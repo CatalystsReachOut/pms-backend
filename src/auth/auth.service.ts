@@ -7,8 +7,9 @@ import { LoginDto } from '../users/dto/login.dto';
 import { LoginInterface, SignUpInterface } from '../interfaces/index';
 import { JwtPayload } from '../types';
 import { EmailService } from '../services/email.service';
+import { ChangePasswordDto } from '../users/dto/updatePassword.dto';
 
-@Injectable()
+@Injectable() 
 export class AuthService {
   constructor(
     private readonly usersService: UsersService,
@@ -21,19 +22,19 @@ export class AuthService {
   }
 
   generateJwtToken(user: User) {
-    const payload = { id: user._id, username: user.username, role: user.role };
+    const payload = { id: user._id, userName: user.userName, role: user.role };
     return this.jwtService.sign(payload);
   }
 
   async signUp(body: SignupDto): Promise<SignUpInterface> {
-    const { username, password, role } = body;
-    const existingUser = await this.usersService.findOneByUsername(username);
+    const { userName, email, password, role } = body;
+    const existingUser = await this.usersService.findOneByUsername(userName);
 
     if (existingUser) {
       throw new UnauthorizedException('Username already exists');
     }
 
-    const newUser = await this.usersService.create({ username, password, role });
+    const newUser = await this.usersService.create({ email, userName, password, role });
     const token = this.generateJwtToken(newUser);
     return {
       message: "User Registered Successfully!",
@@ -42,8 +43,8 @@ export class AuthService {
   }
 
   async login(loginDto: LoginDto): Promise<LoginInterface> {
-    const { username, password } = loginDto;
-    const user = await this.usersService.findOneByUsername(username);
+    const { userName, password } = loginDto;
+    const user = await this.usersService.findOneByUsername(userName);
     if (!user) {
       return null;
     }
@@ -60,6 +61,26 @@ export class AuthService {
       data: user,
       token
     };
+  }
+
+  async changePassword(userName: string, changePasswordDto:ChangePasswordDto) {
+    const user = await this.usersService.findOneByUsername(userName);
+    const isPasswordCorrect = await this.usersService.comparePasswords(changePasswordDto.oldPassword, user.password);
+
+    if (!isPasswordCorrect) {
+     throw new NotFoundException('Invalid credentials')
+    }
+
+    if(changePasswordDto.oldPassword === changePasswordDto.newPassword){
+      throw new Error('new password should not be same as old password')
+    }
+    const hashedPassword = await this.usersService.hashPassword(changePasswordDto.newPassword);
+    user.password = hashedPassword;
+    await user.save();
+    return {
+      success : 'true',
+      message : `password updated successfully`
+    }
   }
 
   async homepage(user: object) {
