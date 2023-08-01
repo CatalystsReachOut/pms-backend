@@ -14,7 +14,10 @@ export interface User extends Document {
 export const UserSchema = new Schema<User>({
   userName: { type: String, required: true, unique: true },
   password: { type: String, required: true },
-  role: { type: String },
+  role: {
+    type: String,
+    enum: ['user', 'manager', 'admin']
+  },
   firstName: { type: String },
   lastName: { type: String },
   email: { type: String },

@@ -7,8 +7,7 @@ import { LoginDto } from '../users/dto/login.dto';
 import { LoginInterface, SignUpInterface } from '../interfaces/index';
 import { JwtPayload } from '../types';
 import { EmailService } from '../services/email.service';
-import { PasswordDto } from '../users/dto/updatePassword.dto';
-import * as brcypt from 'bcrypt';
+import { ChangePasswordDto } from '../users/dto/updatePassword.dto';
 
 @Injectable() 
 export class AuthService {
@@ -64,23 +63,23 @@ export class AuthService {
     };
   }
 
-  async changePassword(userName: string, PasswordDto:PasswordDto) {
+  async changePassword(userName: string, changePasswordDto:ChangePasswordDto) {
     const user = await this.usersService.findOneByUsername(userName);
-    const isPasswordCorrect = await this.usersService.comparePasswords(PasswordDto.oldPassword, user.password);
+    const isPasswordCorrect = await this.usersService.comparePasswords(changePasswordDto.oldPassword, user.password);
 
     if (!isPasswordCorrect) {
      throw new NotFoundException('Invalid credentials')
     }
 
-    if(PasswordDto.oldPassword === PasswordDto.newPassword){
+    if(changePasswordDto.oldPassword === changePasswordDto.newPassword){
       throw new Error('new password should not be same as old password')
     }
-    const hashedPassword = await brcypt.hash(PasswordDto.newPassword, 10);
+    const hashedPassword = await this.usersService.hashPassword(changePasswordDto.newPassword);
     user.password = hashedPassword;
     await user.save();
     return {
       success : 'true',
-      message : `password updated successfully of username ${userName}`
+      message : `password updated successfully`
     }
   }
 

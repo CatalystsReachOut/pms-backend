@@ -8,7 +8,7 @@ import { Roles } from './roles.decorator';
 import { AuthGuard } from './auth.guard';
 import { Request as ExpressRequest } from 'express';
 import { User } from 'src/users/users.schema';
-import { PasswordDto } from '../users/dto/updatePassword.dto';
+import { ChangePasswordDto } from '../users/dto/updatePassword.dto';
 
 interface CustomRequest extends ExpressRequest {
   user: User; // Adjust 'any' to the actual type of the user object if known
@@ -41,10 +41,10 @@ export class AuthController {
 
   @Post('password/update')
   @UseGuards(AuthGuard)
-  async changePassword(@Req() request:CustomRequest,@Body() PasswordDto:PasswordDto){
+  async changePassword(@Req() request:CustomRequest,@Body() changePasswordDto:ChangePasswordDto){
      try{
        const userName = request.user.userName;
-       return await this.authService.changePassword(userName,PasswordDto);
+       return await this.authService.changePassword(userName,changePasswordDto);
      }
      catch(error){
       throw new HttpException(error.message,HttpStatus.UNAUTHORIZED)

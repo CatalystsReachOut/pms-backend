@@ -21,12 +21,16 @@ export class UsersService {
 
   async create(createUserDto: SignupDto): Promise<User> {
     const { email, userName, password, role } = createUserDto;
-    const hashedPassword = await bcrypt.hash(password, 10);
+    const hashedPassword = await this.hashPassword(password);
     const newUser = new this.userModel({ email, userName, password: hashedPassword, role });
     return newUser.save();
   }
 
   async comparePasswords(plainPassword: string, hashedPassword: string): Promise<boolean> {
     return bcrypt.compare(plainPassword, hashedPassword);
+  }
+
+  async hashPassword(password: string):Promise<string>{
+    return await bcrypt.hash(password,10)
   }
 }
