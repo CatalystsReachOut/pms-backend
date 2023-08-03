@@ -9,6 +9,8 @@ export interface User extends Document {
   password: string;
   role: string;
   otp: number;
+  forgotPasswordToken: string,
+  forgotPasswordExpiry: Date
 }
 
 export const UserSchema = new Schema<User>({
@@ -26,7 +28,9 @@ export const UserSchema = new Schema<User>({
     type: Boolean,
     default: false
   },
-  otp: Number
+  otp: Number,
+  forgotPasswordToken: {type: String},
+  forgotPasswordExpiry: Date
 },
   {
     timestamps: true
