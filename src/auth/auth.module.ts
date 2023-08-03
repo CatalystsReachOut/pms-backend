@@ -18,6 +18,6 @@ import { EmailService } from '../services/email.service';
     UsersModule],
   controllers: [AuthController],
   providers: [AuthService, JwtStrategy, EmailService],
-  exports: [JwtModule, PassportModule]
+  exports: [JwtModule, PassportModule, AuthService, JwtStrategy]
 })
 export class AuthModule { }

@@ -1,4 +1,4 @@
-import { HttpException, HttpStatus, Injectable, NotFoundException, Req, UnauthorizedException } from '@nestjs/common';
+import {  Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { UsersService } from '../users/users.service';
 import { JwtService } from '@nestjs/jwt';
 import { SignupDto } from '../users/dto/signup.dto';
@@ -44,7 +44,7 @@ export class AuthService {
     };
   }
 
-  async login(loginDto: LoginDto): Promise<LoginInterface> {
+  async login(loginDto: LoginDto){
     const { userName, password } = loginDto;
     const user = await this.usersService.findOneByUsername(userName);
     if (!user) {
@@ -60,7 +60,6 @@ export class AuthService {
 
     return {
       message: "LoggedIn Successfully!",
-      data: user,
       token
     };
   }

@@ -11,7 +11,7 @@ import { User } from 'src/users/users.schema';
 import { ChangePasswordDto } from '../users/dto/updatePassword.dto';
 import { UserEmailDto, UserNewPasswordDto } from '../users/dto/userEmail.dto';
 
-interface CustomRequest extends ExpressRequest {
+export interface CustomRequest extends ExpressRequest {
   user: User; // Adjust 'any' to the actual type of the user object if known
 }
 
