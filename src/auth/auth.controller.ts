@@ -1,4 +1,4 @@
-import { Injectable, Post, Body, HttpStatus, HttpException, Controller, UseGuards, Get, Req } from '@nestjs/common';
+import { Injectable, Post, Body, HttpStatus, HttpException, Controller, UseGuards, Get, Req, Param } from '@nestjs/common';
 import { SignupDto } from '../users/dto/signup.dto';
 import { AuthService } from './auth.service';
 import { LoginDto } from '../users/dto/login.dto';
@@ -9,6 +9,7 @@ import { AuthGuard } from './auth.guard';
 import { Request as ExpressRequest } from 'express';
 import { User } from 'src/users/users.schema';
 import { ChangePasswordDto } from '../users/dto/updatePassword.dto';
+import { UserEmailDto, UserNewPasswordDto } from '../users/dto/userEmail.dto';
 
 interface CustomRequest extends ExpressRequest {
   user: User; // Adjust 'any' to the actual type of the user object if known
@@ -61,5 +62,25 @@ export class AuthController {
     } catch (error) {
       throw new HttpException(error.message, HttpStatus.UNAUTHORIZED);
     }
+  }
+
+  @Post('forgot-password')
+  async forgotPassword(@Body() body:UserEmailDto){
+    try{
+      return await this.authService.forgotPassword(body)
+    }
+    catch(error){
+      throw new HttpException(error.message, HttpStatus.NOT_FOUND);
+    }
+  }
+
+  @Post('reset-password/:token')
+  async resetPassword(@Param('token') resetPasswordToken: string,@Body() userNewPassword: UserNewPasswordDto){
+     try{
+       return await this.authService.resetPassword(resetPasswordToken, userNewPassword)
+     }
+     catch(error){
+      throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR)
+     }
   }
 }
