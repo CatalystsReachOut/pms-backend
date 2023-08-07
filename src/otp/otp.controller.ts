@@ -1,9 +1,11 @@
-import { Controller, HttpException, HttpStatus, Injectable, Post, UseGuards, Req, NotFoundException } from '@nestjs/common';
+import { Controller, HttpException, HttpStatus, Injectable, Post, UseGuards,  NotFoundException,Req, Body } from '@nestjs/common';
 import { OtpService } from './otp.service';
 import { ApiTags } from '@nestjs/swagger';
 import { AuthGuard } from '../auth/auth.guard';
-import { CustomRequest } from 'src/auth/auth.controller';
 import { UsersService } from '../users/users.service';
+import { UserEmailDto } from '../users/dto/userEmail.dto';
+import { CustomRequest } from 'src/interfaces';
+import { VerifyOtpDto } from './dto/verifyOtp.dto';
 
 @Injectable()
 @ApiTags('OTP')
@@ -16,10 +18,9 @@ export class OtpController {
 
     @Post('sendOtp')
     @UseGuards(AuthGuard)
-    async sendOtpForVerification(@Req() request: CustomRequest) {
+    async sendOtpForVerification(@Body() body:UserEmailDto) {
         try {
-            const { id } = request.user;
-            const isExistUser = await this.usersService.findOneById(id);
+            const isExistUser = await this.usersService.findOneByUserEmail(body);
 
             if(!isExistUser){
                 throw new NotFoundException('user not found')
@@ -34,13 +35,13 @@ export class OtpController {
 
     @Post('verifyOtp')
     @UseGuards(AuthGuard)
-    async verfiyOtp(@Req() request: CustomRequest){
+    async verfiyOtp(@Body() body: VerifyOtpDto){
         try{
-          const {id} = request.user;
-          const isExistUser = await this.usersService.findOneById(id);
-          const {otp} = request.body;
+        //   const {id} = request.user;
+        //   const isExistUser = await this.usersService.findOneById(id);
+        //   const {otp} = request.body;
           
-          return await this.otpService.verifyOtp(isExistUser.email,otp);
+          return await this.otpService.verifyOtp(body);
           
         }
         catch(error){

@@ -6,14 +6,11 @@ import { ApiTags } from '@nestjs/swagger';
 import { RolesGuard } from './roles.guard';
 import { Roles } from './roles.decorator';
 import { AuthGuard } from './auth.guard';
-import { Request as ExpressRequest } from 'express';
-import { User } from 'src/users/users.schema';
 import { ChangePasswordDto } from '../users/dto/updatePassword.dto';
 import { UserEmailDto, UserNewPasswordDto } from '../users/dto/userEmail.dto';
+import { CustomRequest } from 'src/interfaces';
 
-export interface CustomRequest extends ExpressRequest {
-  user: User; // Adjust 'any' to the actual type of the user object if known
-}
+
 
 @Injectable()
 @ApiTags('Authentication')
