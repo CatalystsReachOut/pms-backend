@@ -21,3 +21,9 @@ export interface StatusResponse {
     data?: object;
     message?: string;
 }
+
+// priorities
+export interface PriorityResponse {
+    data?: object;
+    message?: string;
+}

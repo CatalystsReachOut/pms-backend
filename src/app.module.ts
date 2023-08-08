@@ -11,6 +11,7 @@ import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
 import { OtpModule } from './otp/otp.module';
 import { StatusesModule } from './statuses/statuses.module';
+import { PrioritiesModule } from './priorities/priorities.module';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { StatusesModule } from './statuses/statuses.module';
     UsersModule,
     OtpModule,
     StatusesModule,
+    PrioritiesModule,
   ],
   controllers: [AppController],
   providers: [
