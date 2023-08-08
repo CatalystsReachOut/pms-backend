@@ -1,17 +1,17 @@
-import {  Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
+import { Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { UsersService } from '../users/users.service';
 import { JwtService } from '@nestjs/jwt';
 import { SignupDto } from '../users/dto/signup.dto';
 import { User } from '../users/users.schema';
 import { LoginDto } from '../users/dto/login.dto';
-import { LoginInterface, SignUpInterface } from '../interfaces/index';
+import { LoginInterface, SignUpInterface, AuthResponse } from '../interfaces/index';
 import { JwtPayload } from '../types';
 import { EmailService } from '../services/email.service';
 import { ChangePasswordDto } from '../users/dto/updatePassword.dto';
 import { UserEmailDto, UserNewPasswordDto } from 'src/users/dto/userEmail.dto';
 import * as crypto from 'crypto'
 
-@Injectable() 
+@Injectable()
 export class AuthService {
   constructor(
     private readonly usersService: UsersService,
@@ -44,7 +44,7 @@ export class AuthService {
     };
   }
 
-  async login(loginDto: LoginDto){
+  async login(loginDto: LoginDto): Promise<LoginInterface | never> {
     const { userName, password } = loginDto;
     const user = await this.usersService.findOneByUsername(userName);
     if (!user) {
@@ -64,38 +64,37 @@ export class AuthService {
     };
   }
 
-  async changePassword(userName: string, changePasswordDto:ChangePasswordDto) {
+  async changePassword(userName: string, changePasswordDto: ChangePasswordDto): Promise<AuthResponse | never> {
     const user = await this.usersService.findOneByUsername(userName);
     const isPasswordCorrect = await this.usersService.comparePasswords(changePasswordDto.oldPassword, user.password);
 
     if (!isPasswordCorrect) {
-     throw new NotFoundException('Invalid credentials')
+      throw new NotFoundException('Invalid credentials')
     }
 
-    if(changePasswordDto.oldPassword === changePasswordDto.newPassword){
+    if (changePasswordDto.oldPassword === changePasswordDto.newPassword) {
       throw new Error('new password should not be same as old password')
     }
     const hashedPassword = await this.usersService.hashPassword(changePasswordDto.newPassword);
     user.password = hashedPassword;
     await user.save();
     return {
-      success : 'true',
-      message : `password updated successfully`
+      message: `password updated successfully`
     }
   }
 
-  async forgotPassword(body: UserEmailDto){
+  async forgotPassword(body: UserEmailDto): Promise<AuthResponse | never> {
     const isExistUser = await this.usersService.findOneByUserEmail(body);
-  
-    if(!isExistUser){
+
+    if (!isExistUser) {
       throw new NotFoundException('User not found');
     }
 
-   const forgotToken = crypto.randomBytes(20).toString('hex');
-   const encryptedToken = await this.tokenEncryption(forgotToken);
-   isExistUser.forgotPasswordToken = encryptedToken;
-   isExistUser.forgotPasswordExpiry = new Date(Date.now() + 5 * 60 * 1000); // 20 mins to expire the token for password reset
-   await isExistUser.save();
+    const forgotToken = crypto.randomBytes(20).toString('hex');
+    const encryptedToken = await this.tokenEncryption(forgotToken);
+    isExistUser.forgotPasswordToken = encryptedToken;
+    isExistUser.forgotPasswordExpiry = new Date(Date.now() + 5 * 60 * 1000); // 20 mins to expire the token for password reset
+    await isExistUser.save();
 
     // send email to reset password
     this.emailService.sendEmail(
@@ -107,34 +106,32 @@ export class AuthService {
     )
 
     return {
-      success: true,
       message: 'reset link sent successfully to the registered email'
     }
 
   }
 
-  async resetPassword(token: string, userNewPassword:UserNewPasswordDto){
+  async resetPassword(token: string, userNewPassword: UserNewPasswordDto): Promise<AuthResponse | never> {
     const forgotPasswordToken = await this.tokenEncryption(token);
     const property = 'forgotPasswordToken';
-    const isExistUser = await this.usersService.findOneByProperty(property,forgotPasswordToken,{forgotPasswordExpiry : {$gt: Date.now()}});
-    
+    const isExistUser = await this.usersService.findOneByProperty(property, forgotPasswordToken, { forgotPasswordExpiry: { $gt: Date.now() } });
+
     // if user is not found or resetPassword link is expired
-    if(!isExistUser){
+    if (!isExistUser) {
       throw new NotFoundException('user not found or reset link expired')
     }
 
     const { password } = userNewPassword;
     const hashedPassword = await this.usersService.hashPassword(password);
     isExistUser.password = hashedPassword;
-    
+
     isExistUser.forgotPasswordToken = undefined;
     isExistUser.forgotPasswordExpiry = undefined;
 
     await isExistUser.save()
 
     return {
-      message: 'password reset done successfully',
-      success: true
+      message: 'password reset done successfully'
     }
 
   }
@@ -144,8 +141,8 @@ export class AuthService {
       message: "Congrats! You have hacked my prkskrs private page!"
     }
   }
-  
-  async tokenEncryption(token: string): Promise<string>{
-     return crypto.createHash('sha256').update(token).digest('hex')
+
+  async tokenEncryption(token: string): Promise<string> {
+    return crypto.createHash('sha256').update(token).digest('hex')
   }
 }
