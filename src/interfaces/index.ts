@@ -20,6 +20,7 @@ export interface CustomRequest extends ExpressRequest {
 export interface StatusResponse {
     data?: object;
     message?: string;
+    success?:boolean
 }
 
 // priorities

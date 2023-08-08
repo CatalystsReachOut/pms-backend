@@ -4,6 +4,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Project } from './projects.schema';
 import { UsersService } from '../users/users.service';
+import { StatusResponse } from 'src/interfaces';
 
 @Injectable()
 export class ProjectsService {
@@ -11,11 +12,11 @@ export class ProjectsService {
     constructor(
         @InjectModel('Project') private readonly projectModel: Model<Project>,
         private readonly usersService: UsersService
-        ) { }
+    ) { }
 
-    async create(body: ProjectDto) {
+    async create(body: ProjectDto): Promise<StatusResponse | never> {
         let { name, created_By, start_Date, end_Date, thumbnail } = body;
-        
+
         // changing objectid type of createdby into string
         const userId = created_By.toString();
 
@@ -23,7 +24,7 @@ export class ProjectsService {
         if (!isExistUser) {
             throw new NotFoundException('user not found')
         }
-        const newProject = await this.projectModel.create(
+        const newProject = new this.projectModel(
             {
                 name: name,
                 created_By,
@@ -33,13 +34,15 @@ export class ProjectsService {
             }
         );
 
+        await newProject.save()
+
         return {
             success: true,
-            message: `new project successfully created with id ${newProject._id}`
+            message: `new project successfully created`
         }
     }
 
-    async getAllProject() {
+    async getAllProject(): Promise<StatusResponse> {
         const allProjects = await this.projectModel.find({});
         return {
             success: true,
@@ -48,7 +51,7 @@ export class ProjectsService {
 
     }
 
-    async getProjectById(id: string) {
+    async getProjectById(id: string): Promise<StatusResponse | never> {
         const isExistProject = await this.projectModel.findById(id);
 
         if (!isExistProject) {
@@ -61,14 +64,14 @@ export class ProjectsService {
         }
     }
 
-    async updateProject(body: UpdateProjectDto, id: string) {
+    async updateProject(body: UpdateProjectDto, id: string): Promise<StatusResponse | never> {
         const { name, created_By, is_Completed, end_Date, start_Date, thumbnail } = body;
 
         let userId = created_By.toString();
 
         const isExistUser = await this.usersService.findOneById(userId);
 
-        if(!isExistUser){
+        if (!isExistUser) {
             throw new NotFoundException('user not found')
         }
 
@@ -84,7 +87,7 @@ export class ProjectsService {
         isExistProject.is_Completed = is_Completed;
         isExistProject.start_Date = start_Date;
         isExistProject.end_Date = end_Date;
-        
+
 
         await isExistProject.save();
 
@@ -94,7 +97,7 @@ export class ProjectsService {
         }
     }
 
-    async deleteProject(id: string) {
+    async deleteProject(id: string): Promise<StatusResponse | never> {
         const deletedProject = await this.projectModel.findByIdAndDelete(id);
         if (!deletedProject) {
             return {

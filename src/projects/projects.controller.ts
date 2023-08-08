@@ -4,6 +4,7 @@ import { AuthGuard } from '../auth/auth.guard';
 import { RolesGuard } from '../auth/roles.guard';
 import { Roles } from '../auth/roles.decorator';
 import { ProjectDto, UpdateProjectDto } from './dto/projects.dto';
+import { StatusResponse } from 'src/interfaces';
 
 @Controller('projects')
 export class ProjectsController {
@@ -12,7 +13,7 @@ export class ProjectsController {
     @Post()
     @Roles('admin')
     @UseGuards(AuthGuard, RolesGuard)
-    async create(@Body() body: ProjectDto) {
+    async create(@Body() body: ProjectDto): Promise<StatusResponse | never> {
         try {
             return await this.projectsService.create(body)
         }
@@ -24,7 +25,7 @@ export class ProjectsController {
     @Get()
     // @Roles('admin')
     @UseGuards(AuthGuard)
-    async getAll() {
+    async getAll(): Promise<StatusResponse | never> {
         try {
             return await this.projectsService.getAllProject();
         }
@@ -36,7 +37,7 @@ export class ProjectsController {
     @Get('/:id')
     // @Roles('admin')
     @UseGuards(AuthGuard)
-    async getById(@Param('id') projectId: string) {
+    async getById(@Param('id') projectId: string): Promise<StatusResponse | never> {
         try {
             return await this.projectsService.getProjectById(projectId)
         }
@@ -48,9 +49,9 @@ export class ProjectsController {
     @Put('/:id')
     @Roles('admin')
     @UseGuards(AuthGuard)
-    async update(@Body() body: UpdateProjectDto, @Param('id') projectId: string) {
+    async update(@Body() body: UpdateProjectDto, @Param('id') projectId: string): Promise<StatusResponse | never> {
         try {
-            return await this.projectsService.updateProject(body,projectId)
+            return await this.projectsService.updateProject(body, projectId)
         }
         catch (error) {
             throw new HttpException(error.message, HttpStatus.BAD_REQUEST)
@@ -60,13 +61,13 @@ export class ProjectsController {
     @Delete('/:id')
     @Roles('admin')
     @UseGuards(AuthGuard)
-    async delete(@Param('id') id: string){
-       try{
-        return this.projectsService.deleteProject(id);
-       }
-       catch(error){
-        throw new HttpException(error.message, HttpStatus.BAD_REQUEST)
-       }
+    async delete(@Param('id') id: string): Promise<StatusResponse | never> {
+        try {
+            return this.projectsService.deleteProject(id);
+        }
+        catch (error) {
+            throw new HttpException(error.message, HttpStatus.BAD_REQUEST)
+        }
     }
 
 }
