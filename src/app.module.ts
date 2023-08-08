@@ -10,6 +10,7 @@ import { ResponseInterceptor } from './interceptor/response.interceptor';
 import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
 import { OtpModule } from './otp/otp.module';
+import { ProjectsModule } from './projects/projects.module';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { OtpModule } from './otp/otp.module';
     AuthModule,
     UsersModule,
     OtpModule,
+    ProjectsModule,
   ],
   controllers: [AppController],
   providers: [
