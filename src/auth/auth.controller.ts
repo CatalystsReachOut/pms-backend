@@ -10,8 +10,6 @@ import { ChangePasswordDto } from '../users/dto/updatePassword.dto';
 import { UserEmailDto, UserNewPasswordDto } from '../users/dto/userEmail.dto';
 import { CustomRequest } from 'src/interfaces';
 
-
-
 @Injectable()
 @ApiTags('Authentication')
 @Controller('auth')
