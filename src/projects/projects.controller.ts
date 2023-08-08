@@ -4,7 +4,7 @@ import { AuthGuard } from '../auth/auth.guard';
 import { RolesGuard } from '../auth/roles.guard';
 import { Roles } from '../auth/roles.decorator';
 import { ProjectDto, UpdateProjectDto } from './dto/projects.dto';
-import { StatusResponse } from 'src/interfaces';
+import { ProjectResponse } from 'src/interfaces';
 
 @Controller('projects')
 export class ProjectsController {
@@ -13,7 +13,7 @@ export class ProjectsController {
     @Post()
     @Roles('admin')
     @UseGuards(AuthGuard, RolesGuard)
-    async create(@Body() body: ProjectDto): Promise<StatusResponse | never> {
+    async create(@Body() body: ProjectDto): Promise<ProjectResponse | never> {
         try {
             return await this.projectsService.create(body)
         }
@@ -25,7 +25,7 @@ export class ProjectsController {
     @Get()
     // @Roles('admin')
     @UseGuards(AuthGuard)
-    async getAll(): Promise<StatusResponse | never> {
+    async getAll(): Promise<ProjectResponse | never> {
         try {
             return await this.projectsService.getAllProject();
         }
@@ -37,7 +37,7 @@ export class ProjectsController {
     @Get('/:id')
     // @Roles('admin')
     @UseGuards(AuthGuard)
-    async getById(@Param('id') projectId: string): Promise<StatusResponse | never> {
+    async getById(@Param('id') projectId: string): Promise<ProjectResponse | never> {
         try {
             return await this.projectsService.getProjectById(projectId)
         }
@@ -49,7 +49,7 @@ export class ProjectsController {
     @Put('/:id')
     @Roles('admin')
     @UseGuards(AuthGuard)
-    async update(@Body() body: UpdateProjectDto, @Param('id') projectId: string): Promise<StatusResponse | never> {
+    async update(@Body() body: UpdateProjectDto, @Param('id') projectId: string): Promise<ProjectResponse | never> {
         try {
             return await this.projectsService.updateProject(body, projectId)
         }
@@ -61,7 +61,7 @@ export class ProjectsController {
     @Delete('/:id')
     @Roles('admin')
     @UseGuards(AuthGuard)
-    async delete(@Param('id') id: string): Promise<StatusResponse | never> {
+    async delete(@Param('id') id: string): Promise<ProjectResponse | never> {
         try {
             return this.projectsService.deleteProject(id);
         }

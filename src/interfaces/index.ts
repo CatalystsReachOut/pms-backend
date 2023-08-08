@@ -7,9 +7,15 @@ export interface SignUpInterface {
 }
 
 export interface LoginInterface {
-    data: object;
+    data?: object;
     token: string;
     message?: string;
+}
+
+// auth
+export interface AuthResponse{
+    message: string,
+    data?:object
 }
 
 export interface CustomRequest extends ExpressRequest {
@@ -20,11 +26,16 @@ export interface CustomRequest extends ExpressRequest {
 export interface StatusResponse {
     data?: object;
     message?: string;
-    success?:boolean
 }
 
 // priorities
 export interface PriorityResponse {
     data?: object;
     message?: string;
+}
+
+// projects
+export interface ProjectResponse{
+    data?: object;
+    message?: string
 }

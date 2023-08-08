@@ -4,7 +4,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Project } from './projects.schema';
 import { UsersService } from '../users/users.service';
-import { StatusResponse } from 'src/interfaces';
+import { ProjectResponse } from 'src/interfaces';
 
 @Injectable()
 export class ProjectsService {
@@ -14,7 +14,7 @@ export class ProjectsService {
         private readonly usersService: UsersService
     ) { }
 
-    async create(body: ProjectDto): Promise<StatusResponse | never> {
+    async create(body: ProjectDto): Promise<ProjectResponse | never> {
         let { name, created_By, start_Date, end_Date, thumbnail } = body;
 
         // changing objectid type of createdby into string
@@ -37,21 +37,19 @@ export class ProjectsService {
         await newProject.save()
 
         return {
-            success: true,
             message: `new project successfully created`
         }
     }
 
-    async getAllProject(): Promise<StatusResponse> {
+    async getAllProject(): Promise<ProjectResponse> {
         const allProjects = await this.projectModel.find({});
         return {
-            success: true,
             data: allProjects
         }
 
     }
 
-    async getProjectById(id: string): Promise<StatusResponse | never> {
+    async getProjectById(id: string): Promise<ProjectResponse | never> {
         const isExistProject = await this.projectModel.findById(id);
 
         if (!isExistProject) {
@@ -59,12 +57,11 @@ export class ProjectsService {
         }
 
         return {
-            success: true,
             data: isExistProject
         }
     }
 
-    async updateProject(body: UpdateProjectDto, id: string): Promise<StatusResponse | never> {
+    async updateProject(body: UpdateProjectDto, id: string): Promise<ProjectResponse | never> {
         const { name, created_By, is_Completed, end_Date, start_Date, thumbnail } = body;
 
         let userId = created_By.toString();
@@ -92,21 +89,18 @@ export class ProjectsService {
         await isExistProject.save();
 
         return {
-            success: true,
             message: `project updated successfully of id ${isExistProject._id}`
         }
     }
 
-    async deleteProject(id: string): Promise<StatusResponse | never> {
+    async deleteProject(id: string): Promise<ProjectResponse | never> {
         const deletedProject = await this.projectModel.findByIdAndDelete(id);
         if (!deletedProject) {
             return {
-                success: false,
                 message: 'no such project of given id'
             }
         }
         return {
-            success: true,
             message: `project deleted successfully with id ${id}`
         }
     }
