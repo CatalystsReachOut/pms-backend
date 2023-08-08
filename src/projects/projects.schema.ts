@@ -6,14 +6,15 @@ export interface Project extends Document {
     start_Date: Date,
     end_Date: Date,
     thumbnail: string,
-    is_completed: boolean
+    is_Completed: boolean
 }
 
 export const ProjectSchema = new Schema(
     {
         name: {
             type: String,
-            required: true
+            required: true,
+            unique: true
         },
         created_By: {
             type: mongoose.Schema.Types.ObjectId,
@@ -29,7 +30,7 @@ export const ProjectSchema = new Schema(
             type: String,
             required: true
         },
-        is_completed: {
+        is_Completed: {
             type: Boolean,
             default: false
         }

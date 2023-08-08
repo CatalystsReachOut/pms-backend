@@ -1,4 +1,4 @@
-import { IsBoolean, IsMongoId, IsNotEmpty, IsString } from "class-validator";
+import { IsBoolean, IsDate, IsMongoId, IsNotEmpty, IsOptional, IsString } from "class-validator";
 import mongoose from "mongoose";
 
 export class ProjectDto{
@@ -12,7 +12,13 @@ export class ProjectDto{
 
    @IsNotEmpty()
    @IsString()
-   thumbnail: string
+   thumbnail: string;
+
+   @IsOptional()
+   start_Date?: Date;
+
+   @IsOptional()
+   end_Date: Date;
 }
 export class UpdateProjectDto{
 
@@ -27,8 +33,14 @@ export class UpdateProjectDto{
    @IsString()
    thumbnail: string;
 
+   @IsOptional()
+   start_Date: Date;
+
+   @IsOptional()
+   end_Date: Date;
+
    @IsBoolean()
-   isCompleted: boolean
-   
+   is_Completed: boolean
+
 }
 

@@ -20,6 +20,9 @@ import { PrioritiesModule } from './priorities/priorities.module';
     AuthModule,
     UsersModule,
     OtpModule,
+    ProjectsModule,
+    StatusesModule,
+    PrioritiesModule
   ],
   controllers: [AppController],
   providers: [
