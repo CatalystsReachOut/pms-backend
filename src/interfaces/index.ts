@@ -39,3 +39,9 @@ export interface ProjectResponse{
     data?: object;
     message?: string
 }
+
+// tasks
+export interface TaskResponse{
+    data?: object;
+    message?: string
+}

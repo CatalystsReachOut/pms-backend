@@ -1,4 +1,15 @@
-import { Injectable, Post, Body, HttpStatus, HttpException, Controller, UseGuards, Get, Req, Param } from '@nestjs/common';
+import {
+  Injectable,
+  Post,
+  Body,
+  HttpStatus,
+  HttpException,
+  Controller,
+  UseGuards,
+  Get,
+  Req,
+  Param,
+} from '@nestjs/common';
 import { SignupDto } from '../users/dto/signup.dto';
 import { AuthService } from './auth.service';
 import { LoginDto } from '../users/dto/login.dto';
@@ -14,7 +25,7 @@ import { CustomRequest } from 'src/interfaces';
 @ApiTags('Authentication')
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService) { }
+  constructor(private readonly authService: AuthService) {}
 
   @Post('signup')
   async signUp(@Body() body: SignupDto) {
@@ -34,17 +45,18 @@ export class AuthController {
     }
   }
 
-
   @Post('password/update')
   @UseGuards(AuthGuard)
-  async changePassword(@Req() request:CustomRequest,@Body() changePasswordDto:ChangePasswordDto){
-     try{
-       const userName = request.user.userName;
-       return await this.authService.changePassword(userName,changePasswordDto);
-     }
-     catch(error){
-      throw new HttpException(error.message,HttpStatus.UNAUTHORIZED)
-     }
+  async changePassword(
+    @Req() request: CustomRequest,
+    @Body() changePasswordDto: ChangePasswordDto,
+  ) {
+    try {
+      const userName = request.user.userName;
+      return await this.authService.changePassword(userName, changePasswordDto);
+    } catch (error) {
+      throw new HttpException(error.message, HttpStatus.UNAUTHORIZED);
+    }
   }
 
   @Post('homepage')
@@ -60,22 +72,26 @@ export class AuthController {
   }
 
   @Post('forgot-password')
-  async forgotPassword(@Body() body:UserEmailDto){
-    try{
-      return await this.authService.forgotPassword(body)
-    }
-    catch(error){
+  async forgotPassword(@Body() body: UserEmailDto) {
+    try {
+      return await this.authService.forgotPassword(body);
+    } catch (error) {
       throw new HttpException(error.message, HttpStatus.NOT_FOUND);
     }
   }
 
   @Post('reset-password/:token')
-  async resetPassword(@Param('token') resetPasswordToken: string,@Body() userNewPassword: UserNewPasswordDto){
-     try{
-       return await this.authService.resetPassword(resetPasswordToken, userNewPassword)
-     }
-     catch(error){
-      throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR)
-     }
+  async resetPassword(
+    @Param('token') resetPasswordToken: string,
+    @Body() userNewPassword: UserNewPasswordDto,
+  ) {
+    try {
+      return await this.authService.resetPassword(
+        resetPasswordToken,
+        userNewPassword,
+      );
+    } catch (error) {
+      throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
   }
 }

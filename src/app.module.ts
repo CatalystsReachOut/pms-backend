@@ -13,6 +13,7 @@ import { OtpModule } from './otp/otp.module';
 import { ProjectsModule } from './projects/projects.module';
 import { StatusesModule } from './statuses/statuses.module';
 import { PrioritiesModule } from './priorities/priorities.module';
+import { TasksModule } from './tasks/tasks.module';
 
 @Module({
   imports: [
@@ -22,7 +23,8 @@ import { PrioritiesModule } from './priorities/priorities.module';
     OtpModule,
     ProjectsModule,
     StatusesModule,
-    PrioritiesModule
+    PrioritiesModule,
+    TasksModule,
   ],
   controllers: [AppController],
   providers: [
