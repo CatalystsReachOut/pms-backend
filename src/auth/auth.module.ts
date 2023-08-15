@@ -7,17 +7,17 @@ import { PassportModule } from '@nestjs/passport';
 import { UsersModule } from '../users/users.module';
 import { EmailService } from '../services/email.service';
 
-
 @Module({
   imports: [
     PassportModule.register({ defaultStrategy: 'jwt' }),
     JwtModule.register({
       secret: process.env.JWT_SECRET,
-      signOptions: { expiresIn: '1h' }
+      signOptions: { expiresIn: '1h' },
     }),
-    UsersModule],
+    UsersModule,
+  ],
   controllers: [AuthController],
   providers: [AuthService, JwtStrategy, EmailService],
-  exports: [JwtModule, PassportModule, AuthService, JwtStrategy]
+  exports: [JwtModule, PassportModule, AuthService, JwtStrategy],
 })
-export class AuthModule { }
+export class AuthModule {}
