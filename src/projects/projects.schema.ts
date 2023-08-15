@@ -2,39 +2,35 @@ import mongoose, { Schema, model, Document } from 'mongoose'
 
 export interface Project extends Document {
     name: string,
-    created_By: mongoose.Types.ObjectId,
-    start_Date: Date,
-    end_Date: Date,
+    createdBy: mongoose.Types.ObjectId,
+    startDate: Date,
+    endDate: Date,
     thumbnail: string,
-    is_Completed: boolean
+    isCompleted: boolean
 }
 
 export const ProjectSchema = new Schema(
     {
         name: {
             type: String,
-            required: true,
-            unique: true
         },
-        created_By: {
+        createdBy: {
             type: mongoose.Schema.Types.ObjectId,
-            ref: 'UserModel',
-            required: true
+            ref: 'User',
         },
-        start_Date: {
+        startDate: {
             type: Date,
             default: Date.now()
         },
-        end_Date: Date,
+        endDate: Date,
         thumbnail: {
             type: String,
-            required: true
         },
-        is_Completed: {
+        isCompleted: {
             type: Boolean,
             default: false
         }
     }
 )
 
-export const ProjectModel = model<Project>('project', ProjectSchema);
+export const ProjectModel = model<Project>('Project', ProjectSchema);

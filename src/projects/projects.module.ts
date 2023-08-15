@@ -7,8 +7,13 @@ import { ProjectSchema } from './projects.schema';
 import { UsersModule } from '../users/users.module';
 
 @Module({
-  imports: [MongooseModule.forFeature([{ name: 'Project', schema: ProjectSchema }]), AuthModule, UsersModule],
+  imports: [
+    MongooseModule.forFeature([{ name: 'Project', schema: ProjectSchema }]),
+    AuthModule,
+    UsersModule,
+  ],
   controllers: [ProjectsController],
-  providers: [ProjectsService]
+  providers: [ProjectsService],
+  exports: [ProjectsService],
 })
-export class ProjectsModule { }
+export class ProjectsModule {}

@@ -8,43 +8,39 @@ import {
 } from 'class-validator';
 import mongoose from 'mongoose';
 
-export class ProjectDto {
+export class CreateTaskDto {
   @IsNotEmpty()
   @IsString()
   name: string;
 
-  @IsMongoId()
-  @IsOptional()
-  createdBy: mongoose.Types.ObjectId;
-
   @IsOptional()
   @IsString()
-  thumbnail: string;
+  description: string;
 
+  @IsOptional()
+  @IsMongoId()
+  projectId: mongoose.Types.ObjectId;
+
+  @IsOptional()
+  @IsMongoId()
+  prirorityId: mongoose.Types.ObjectId;
+
+  @IsOptional()
   @IsOptional()
   startDate?: Date;
 
   @IsOptional()
   endDate: Date;
-}
-export class UpdateProjectDto {
-  @IsNotEmpty()
-  @IsString()
-  name: string;
 
+  @IsOptional()
   @IsMongoId()
   createdBy: mongoose.Types.ObjectId;
 
-  @IsNotEmpty()
+  @IsOptional()
   @IsString()
-  thumbnail: string;
+  attachment: string;
 
   @IsOptional()
-  startDate: Date;
-
-  @IsOptional()
-  endDate: Date;
-
-  @IsBoolean()
-  isCompleted: boolean;
+  @IsMongoId()
+  statusId: mongoose.Types.ObjectId;
 }

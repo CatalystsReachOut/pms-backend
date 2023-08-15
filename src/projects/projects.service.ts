@@ -14,23 +14,23 @@ export class ProjectsService {
         private readonly usersService: UsersService
     ) { }
 
-    async create(body: ProjectDto): Promise<ProjectResponse | never> {
-        let { name, created_By, start_Date, end_Date, thumbnail } = body;
+    async createProject(body: ProjectDto): Promise<ProjectResponse | never> {
+        let { name, createdBy, startDate, endDate, thumbnail } = body;
 
         // changing objectid type of createdby into string
-        const userId = created_By.toString();
+        // const userId = created_By.toString();
 
-        const isExistUser = await this.usersService.findOneById(userId);
-        if (!isExistUser) {
-            throw new NotFoundException('user not found')
-        }
+        // const isExistUser = await this.usersService.findOneById(userId);
+        // if (!isExistUser) {
+        //     throw new NotFoundException('user not found')
+        // }
         const newProject = new this.projectModel(
             {
-                name: name,
-                created_By,
+                name,
+                createdBy,
                 thumbnail,
-                end_Date,
-                start_Date
+                endDate,
+                startDate
             }
         );
 
@@ -49,8 +49,8 @@ export class ProjectsService {
 
     }
 
-    async getProjectById(id: string): Promise<ProjectResponse | never> {
-        const isExistProject = await this.projectModel.findById(id);
+    async getProjectById(projectId: string): Promise<ProjectResponse | never> {
+        const isExistProject = await this.projectModel.findById(projectId);
 
         if (!isExistProject) {
             throw new NotFoundException('Project not found');
@@ -61,47 +61,47 @@ export class ProjectsService {
         }
     }
 
-    async updateProject(body: UpdateProjectDto, id: string): Promise<ProjectResponse | never> {
-        const { name, created_By, is_Completed, end_Date, start_Date, thumbnail } = body;
+    async updateProject(body: UpdateProjectDto, projectId: string): Promise<ProjectResponse | never> {
+        const { name, createdBy, isCompleted, endDate, startDate, thumbnail } = body;
 
-        let userId = created_By.toString();
+        // let userId = created_By.toString();
 
-        const isExistUser = await this.usersService.findOneById(userId);
+        // const isExistUser = await this.usersService.findOneById(userId);
 
-        if (!isExistUser) {
-            throw new NotFoundException('user not found')
-        }
+        // if (!isExistUser) {
+        //     throw new NotFoundException('user not found')
+        // }
 
-        const isExistProject = await this.projectModel.findById(id);
+        const isExistProject = await this.projectModel.findById(projectId);
 
         if (!isExistProject) {
             throw new NotFoundException('Project not found');
         }
 
         isExistProject.name = name;
-        isExistProject.created_By = created_By;
+        isExistProject.createdBy = createdBy;
         isExistProject.thumbnail = thumbnail;
-        isExistProject.is_Completed = is_Completed;
-        isExistProject.start_Date = start_Date;
-        isExistProject.end_Date = end_Date;
+        isExistProject.isCompleted = isCompleted;
+        isExistProject.startDate = startDate;
+        isExistProject.endDate = endDate;
 
 
         await isExistProject.save();
 
         return {
-            message: `project updated successfully of id ${isExistProject._id}`
+            message: `Project Updated Successfully!`
         }
     }
 
-    async deleteProject(id: string): Promise<ProjectResponse | never> {
-        const deletedProject = await this.projectModel.findByIdAndDelete(id);
+    async deleteProject(projectId: string): Promise<ProjectResponse | never> {
+        const deletedProject = await this.projectModel.findByIdAndDelete(projectId);
         if (!deletedProject) {
             return {
                 message: 'no such project of given id'
             }
         }
         return {
-            message: `project deleted successfully with id ${id}`
+            message: `Project deleted successfully`
         }
     }
 

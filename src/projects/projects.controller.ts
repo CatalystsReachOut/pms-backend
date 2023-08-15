@@ -11,11 +11,11 @@ export class ProjectsController {
     constructor(private readonly projectsService: ProjectsService) { }
 
     @Post()
-    @Roles('admin')
-    @UseGuards(AuthGuard, RolesGuard)
-    async create(@Body() body: ProjectDto): Promise<ProjectResponse | never> {
+    // @Roles('admin')
+    // @UseGuards(AuthGuard, RolesGuard)
+    async createProject(@Body() body: ProjectDto): Promise<ProjectResponse | never> {
         try {
-            return await this.projectsService.create(body)
+            return await this.projectsService.createProject(body)
         }
         catch (error) {
             throw new HttpException(error.message, HttpStatus.BAD_REQUEST)
@@ -24,7 +24,7 @@ export class ProjectsController {
 
     @Get()
     // @Roles('admin')
-    @UseGuards(AuthGuard)
+    // @UseGuards(AuthGuard)
     async getAll(): Promise<ProjectResponse | never> {
         try {
             return await this.projectsService.getAllProject();
@@ -34,10 +34,10 @@ export class ProjectsController {
         }
     }
 
-    @Get('/:id')
+    @Get('/:projectId')
     // @Roles('admin')
-    @UseGuards(AuthGuard)
-    async getById(@Param('id') projectId: string): Promise<ProjectResponse | never> {
+    // @UseGuards(AuthGuard)
+    async getById(@Param('projectId') projectId: string): Promise<ProjectResponse | never> {
         try {
             return await this.projectsService.getProjectById(projectId)
         }
@@ -46,10 +46,10 @@ export class ProjectsController {
         }
     }
 
-    @Put('/:id')
-    @Roles('admin')
-    @UseGuards(AuthGuard)
-    async update(@Body() body: UpdateProjectDto, @Param('id') projectId: string): Promise<ProjectResponse | never> {
+    @Put('/update/:projectId')
+    // @Roles('admin')
+    // @UseGuards(AuthGuard)
+    async update(@Body() body: UpdateProjectDto, @Param('projectId') projectId: string): Promise<ProjectResponse | never> {
         try {
             return await this.projectsService.updateProject(body, projectId)
         }
@@ -58,12 +58,12 @@ export class ProjectsController {
         }
     }
 
-    @Delete('/:id')
-    @Roles('admin')
-    @UseGuards(AuthGuard)
-    async delete(@Param('id') id: string): Promise<ProjectResponse | never> {
+    @Delete('/delete/:projectId')
+    // @Roles('admin')
+    // @UseGuards(AuthGuard)
+    async delete(@Param('projectId') projectId: string): Promise<ProjectResponse | never> {
         try {
-            return this.projectsService.deleteProject(id);
+            return this.projectsService.deleteProject(projectId);
         }
         catch (error) {
             throw new HttpException(error.message, HttpStatus.BAD_REQUEST)
