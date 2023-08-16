@@ -16,7 +16,7 @@ export class SubtasksService {
     private readonly tasksService: TasksService,
   ) {}
 
-  async createTask(body: CreateSubTaskDto): Promise<SubTaskResponse> {
+  async createSubTask(body: CreateSubTaskDto): Promise<SubTaskResponse> {
     let {
       name,
       description,
@@ -68,7 +68,7 @@ export class SubtasksService {
   //     };
   //   }
 
-  async getTaskById(taskId: string): Promise<SubTaskResponse> {
+  async getSubTaskById(taskId: string): Promise<SubTaskResponse> {
     const taskExists = await this.subTaskModel.findById(taskId);
 
     if (!taskExists) {
@@ -80,7 +80,7 @@ export class SubtasksService {
     };
   }
 
-  async updateProject(
+  async updateSubTask(
     body: UpdateSubTaskDto,
     taskId: string,
   ): Promise<SubTaskResponse> {
@@ -130,7 +130,7 @@ export class SubtasksService {
     };
   }
 
-  async deleteProject(taskId: string): Promise<SubTaskResponse> {
+  async deleteSubTask(taskId: string): Promise<SubTaskResponse> {
     const deletedProject = await this.subTaskModel.findByIdAndDelete(taskId);
 
     if (!deletedProject) {

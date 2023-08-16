@@ -16,5 +16,6 @@ import { TasksModule } from '../tasks/tasks.module';
   ],
   controllers: [SubtasksController],
   providers: [SubtasksService],
+  exports: [SubtasksService],
 })
 export class SubtasksModule {}
