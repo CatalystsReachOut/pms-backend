@@ -57,3 +57,9 @@ export interface ProjectCollaboratorResponse{
     data?: object;
     message?: string
 }
+
+// taskCollaborator
+export interface TaskCollaboratorResponse{
+    data?: object;
+    message?: string
+}
