@@ -19,7 +19,7 @@ export class CreateSubTaskDto {
 
   @IsOptional()
   @IsMongoId()
-  projectId: mongoose.Types.ObjectId;
+  taskId: mongoose.Types.ObjectId;
 
   @IsOptional()
   @IsMongoId()

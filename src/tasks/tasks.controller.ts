@@ -16,7 +16,9 @@ import { UpdateTaskDto } from './dto/updateTask.dto';
 import { AuthGuard } from '../auth/auth.guard';
 import { RolesGuard } from '../auth/roles.guard';
 import { Roles } from '../auth/roles.decorator';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Task')
 @Controller('tasks')
 export class TasksController {
   constructor(private readonly tasksService: TasksService) {}
