@@ -15,6 +15,7 @@ import { StatusesModule } from './statuses/statuses.module';
 import { PrioritiesModule } from './priorities/priorities.module';
 import { TasksModule } from './tasks/tasks.module';
 import { SubtasksModule } from './subtasks/subtasks.module';
+import { ProjectCollaboratorsModule } from './project-collaborators/project-collaborators.module';
 
 @Module({
   imports: [
@@ -27,6 +28,7 @@ import { SubtasksModule } from './subtasks/subtasks.module';
     PrioritiesModule,
     TasksModule,
     SubtasksModule,
+    ProjectCollaboratorsModule,
   ],
   controllers: [AppController],
   providers: [
