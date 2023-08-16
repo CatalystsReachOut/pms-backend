@@ -26,9 +26,9 @@ export class SubtasksController {
   @Post()
   @Roles('admin', 'manager')
   @UseGuards(AuthGuard, RolesGuard)
-  async createTask(@Body() body: CreateSubTaskDto) {
+  async createSubTask(@Body() body: CreateSubTaskDto) {
     try {
-      return await this.subTasksService.createTask(body);
+      return await this.subTasksService.createSubTask(body);
     } catch (error) {
       throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
     }
@@ -48,9 +48,9 @@ export class SubtasksController {
   @Get('/:subTaskId')
   @Roles('admin', 'manager', 'user')
   @UseGuards(AuthGuard, RolesGuard)
-  async getById(@Param('subTaskId') subTaskId: string) {
+  async getSubTaskById(@Param('subTaskId') subTaskId: string) {
     try {
-      return await this.subTasksService.getTaskById(subTaskId);
+      return await this.subTasksService.getSubTaskById(subTaskId);
     } catch (error) {
       throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
     }
@@ -59,12 +59,12 @@ export class SubtasksController {
   @Put('/update/:subTaskId')
   @Roles('admin', 'manager', 'user')
   @UseGuards(AuthGuard, RolesGuard)
-  async update(
+  async updateSubTask(
     @Body() body: UpdateSubTaskDto,
     @Param('subTaskId') subTaskId: string,
   ) {
     try {
-      return await this.subTasksService.updateProject(body, subTaskId);
+      return await this.subTasksService.updateSubTask(body, subTaskId);
     } catch (error) {
       throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
     }
@@ -73,9 +73,9 @@ export class SubtasksController {
   @Delete('/delete/:subTaskId')
   @Roles('admin', 'manager')
   @UseGuards(AuthGuard, RolesGuard)
-  async delete(@Param('subTaskId') subTaskId: string) {
+  async deleteSubTask(@Param('subTaskId') subTaskId: string) {
     try {
-      return this.subTasksService.deleteProject(subTaskId);
+      return this.subTasksService.deleteSubTask(subTaskId);
     } catch (error) {
       throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
     }

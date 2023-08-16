@@ -63,3 +63,9 @@ export interface TaskCollaboratorResponse{
     data?: object;
     message?: string
 }
+
+// subTaskCollaborator
+export interface SubTaskCollaboratorResponse{
+    data?: object;
+    message?: string
+}
