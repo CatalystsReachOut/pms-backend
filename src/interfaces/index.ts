@@ -45,3 +45,9 @@ export interface TaskResponse{
     data?: object;
     message?: string
 }
+
+// subtasks
+export interface SubTaskResponse{
+    data?: object;
+    message?: string
+}

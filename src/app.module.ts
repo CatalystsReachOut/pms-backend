@@ -14,6 +14,7 @@ import { ProjectsModule } from './projects/projects.module';
 import { StatusesModule } from './statuses/statuses.module';
 import { PrioritiesModule } from './priorities/priorities.module';
 import { TasksModule } from './tasks/tasks.module';
+import { SubtasksModule } from './subtasks/subtasks.module';
 
 @Module({
   imports: [
@@ -25,6 +26,7 @@ import { TasksModule } from './tasks/tasks.module';
     StatusesModule,
     PrioritiesModule,
     TasksModule,
+    SubtasksModule,
   ],
   controllers: [AppController],
   providers: [
