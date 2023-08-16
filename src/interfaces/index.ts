@@ -51,3 +51,9 @@ export interface SubTaskResponse{
     data?: object;
     message?: string
 }
+
+// projectCollaborator
+export interface ProjectCollaboratorResponse{
+    data?: object;
+    message?: string
+}
