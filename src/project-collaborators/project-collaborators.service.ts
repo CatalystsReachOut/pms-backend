@@ -22,11 +22,11 @@ export class ProjectCollaboratorsService {
   ): Promise<ProjectCollaboratorResponse> {
     const { userId } = body;
     const project = await this.projectsService.getProjectById(projectId);
-    console.log(project);
     
     if (!project) {
       throw new NotFoundException('Project not found');
     }
+    
     const collaborator = await this.projectCollaboratorModel.create({
       userId,
       projectId,
@@ -42,7 +42,6 @@ export class ProjectCollaboratorsService {
   ): Promise<ProjectCollaboratorResponse> {
     const collaborators = await this.projectCollaboratorModel
       .find({ projectId: projectId })
-
       .populate('userId')
       .exec();
 

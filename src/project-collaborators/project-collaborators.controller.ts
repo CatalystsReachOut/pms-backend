@@ -3,6 +3,8 @@ import {
   Controller,
   Delete,
   Get,
+  HttpException,
+  HttpStatus,
   NotFoundException,
   Param,
   Post,
@@ -23,15 +25,23 @@ export class ProjectCollaboratorsController {
     @Param('projectId') projectId: string,
     @Body() body: CreateOrUpdateProjectCollaboratorsDto,
   ) {
-    return this.projectCollaboratorService.addProjectCollaborator(
-      projectId,
-      body,
-    );
+    try {
+      return this.projectCollaboratorService.addProjectCollaborator(
+        projectId,
+        body,
+      );
+    } catch (error) {
+      throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
+    }
   }
 
   @Get(':projectId')
-  async getCollaborators(@Param('projectId') projectId: string) {      
-    return await this.projectCollaboratorService.getCollaborators(projectId);;
+  async getCollaborators(@Param('projectId') projectId: string) {
+    try {
+      return await this.projectCollaboratorService.getCollaborators(projectId);
+    } catch (error) {
+      throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
+    }
   }
 
   @Delete(':projectId/:collaboratorId')
@@ -39,9 +49,13 @@ export class ProjectCollaboratorsController {
     @Param('projectId') projectId: string,
     @Param('collaboratorId') collaboratorId: string,
   ) {
-    return await this.projectCollaboratorService.removeCollaborator(
-      projectId,
-      collaboratorId,
-    );
+    try {
+      return await this.projectCollaboratorService.removeCollaborator(
+        projectId,
+        collaboratorId,
+      );
+    } catch (error) {
+      throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
+    }
   }
 }
