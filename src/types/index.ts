@@ -1,7 +1,8 @@
 export type JwtPayload = {
   id: string;
   username: string;
-  role: string;};
+  role: string;
+};
 
 export interface HttpSuccessResponse<T> {
   readonly data: T;
