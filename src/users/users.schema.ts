@@ -9,31 +9,32 @@ export interface User extends Document {
   password: string;
   role: string;
   otp: number;
-  forgotPasswordToken: string,
-  forgotPasswordExpiry: Date
+  forgotPasswordToken: string;
+  forgotPasswordExpiry: Date;
 }
 
-export const UserSchema = new Schema<User>({
-  userName: { type: String, required: true, unique: true },
-  password: { type: String, required: true },
-  role: {
-    type: String,
-    enum: ['user', 'manager', 'admin']
-  },
-  firstName: { type: String },
-  lastName: { type: String },
-  email: { type: String },
-  isVerified:
+export const UserSchema = new Schema<User>(
   {
-    type: Boolean,
-    default: false
+    userName: { type: String, required: true, unique: true },
+    password: { type: String, required: true },
+    role: {
+      type: String,
+      enum: ['user', 'manager', 'admin'],
+    },
+    firstName: { type: String },
+    lastName: { type: String },
+    email: { type: String },
+    isVerified: {
+      type: Boolean,
+      default: false,
+    },
+    otp: Number,
+    forgotPasswordToken: { type: String },
+    forgotPasswordExpiry: Date,
   },
-  otp: Number,
-  forgotPasswordToken: {type: String},
-  forgotPasswordExpiry: Date
-},
   {
-    timestamps: true
-  });
+    timestamps: true,
+  },
+);
 
 export const UserModel = model<User>('User', UserSchema);
